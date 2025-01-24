@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>My Personal Website</title>
+
+  <!-- Link to your manifest -->
   <link rel="manifest" href="/manifest.json">
+  
+  <!-- Register the service worker -->
   <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js");
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
     }
   </script>
+
   <style>
     /* Remove default margin and padding from the body and html */
     html, body {
@@ -24,9 +39,57 @@
       padding: 0;    /* Remove any internal padding */
       display: block; /* Prevent any space below the iframe */
     }
+
+    /* Install button (initially hidden) */
+    #install-btn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #install-btn:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
   <iframe src="https://partners.hown.com.au/" width="100%" height="100%"></iframe>
+  
+  <!-- Install button -->
+  <button id="install-btn">Install App</button>
+
+  <script>
+    let deferredPrompt;
+    
+    // Listen for the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault(); // Prevent the default install prompt
+      deferredPrompt = e;
+
+      // Show the "Install" button
+      const installButton = document.getElementById('install-btn');
+      installButton.style.display = 'block';
+
+      // When the button is clicked, show the install prompt
+      installButton.addEventListener('click', () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+  </script>
 </body>
 </html>
