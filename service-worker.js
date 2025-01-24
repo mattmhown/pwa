@@ -5,8 +5,8 @@ const URLS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-2048x2024.png',
-  '/https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-2048x2024.png',
+  'https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-2048x2024.png',
+  'https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-2048x2024.png',
   // Add any other assets you want to cache
 ];
 
