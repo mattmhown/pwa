@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>HOWN PARTNER PORTAL</title>
+
+  <!-- Link to your manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Register the service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+
+  <style>
+    /* Remove default margin and padding from the body and html */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Cover the entire viewport */
+    #content-container {
+      height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Create a semi-transparent overlay */
+    #install-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      display: none;
+    }
+
+    #install-btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #install-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Optional: Style for the content displayed inside the PWA */
+    #content-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="content-container">
+    <!-- Optional: If you want to embed content from an external source, use an iframe -->
+    <!-- Replace the iframe with your site's content -->
+    <iframe src="https://partners.hown.com.au/" id="site-frame"></iframe>
+
+    <!-- Install prompt overlay -->
+    <div id="install-overlay">
+      <div>
+        <p>Install this app for a better experience!</p>
+        <button id="install-btn">Install App</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let deferredPrompt;
+    const installOverlay = document.getElementById('install-overlay');
+    const installButton = document.getElementById('install-btn');
+
+    // Listen for the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault(); // Prevent the default install prompt
+      deferredPrompt = e;
+
+      // Show the install prompt overlay
+      installOverlay.style.display = 'flex';
+
+      // When the button is clicked, show the install prompt
+      installButton.addEventListener('click', () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+          installOverlay.style.display = 'none'; // Hide overlay after choice
+        });
+      });
+    });
+
+    // Optional: Hide the install overlay if the app is already installed
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA was installed');
+      installOverlay.style.display = 'none'; // Hide overlay if already installed
+    });
+  </script>
+</body>
+</html>
