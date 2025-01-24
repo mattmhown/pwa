@@ -8,14 +8,22 @@
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-2048x2024.png",
+      "src": "https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-192x192.png", 
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-2048x2024.png",
+      "src": "https://www.hown.com.au/wp-content/uploads/2024/02/Color-logo-no-background-1-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "https://yourwebsite.com/screenshot1.png",
+      "sizes": "800x600",
+      "type": "image/png"
+    }
+  ],
+  "id": "/"
 }
