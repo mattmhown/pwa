@@ -67,27 +67,20 @@
     #install-btn:hover {
       background-color: #0056b3;
     }
-
-    /* Optional: Style for the content displayed inside the PWA */
-    #content-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
   </style>
 </head>
 <body>
   <div id="content-container">
-    <!-- Optional: If you want to embed content from an external source, use an iframe -->
-    <!-- Replace the iframe with your site's content -->
-    <iframe src="https://partners.hown.com.au/" id="site-frame"></iframe>
+    <!-- Main content of your PWA here -->
+    <h1>Welcome to the HOWN Partner Portal</h1>
+    <!-- Your web app content will be served here -->
+  </div>
 
-    <!-- Install prompt overlay -->
-    <div id="install-overlay">
-      <div>
-        <p>Install this app for a better experience!</p>
-        <button id="install-btn">Install App</button>
-      </div>
+  <!-- Install prompt overlay -->
+  <div id="install-overlay">
+    <div>
+      <p>Install this app for a better experience!</p>
+      <button id="install-btn">Install App</button>
     </div>
   </div>
 
@@ -96,15 +89,31 @@
     const installOverlay = document.getElementById('install-overlay');
     const installButton = document.getElementById('install-btn');
 
-    // Listen for the beforeinstallprompt event
+    // Check if the user is on iOS
+    function isIOS() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    // If on iOS, show the custom install instructions
+    if (isIOS()) {
+      // Show iOS install instructions instead of relying on the PWA prompt
+      installOverlay.style.display = 'flex';
+
+      installButton.textContent = 'Tap to install (iOS)';
+      installButton.onclick = function() {
+        alert('To install on iOS: Tap the Share button in Safari, then select "Add to Home Screen"');
+        installOverlay.style.display = 'none';
+      };
+    }
+
+    // For Android or other platforms, use the default install flow
     window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault(); // Prevent the default install prompt
+      e.preventDefault();
       deferredPrompt = e;
 
       // Show the install prompt overlay
       installOverlay.style.display = 'flex';
 
-      // When the button is clicked, show the install prompt
       installButton.addEventListener('click', () => {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then((choiceResult) => {
@@ -114,7 +123,7 @@
             console.log('User dismissed the install prompt');
           }
           deferredPrompt = null;
-          installOverlay.style.display = 'none'; // Hide overlay after choice
+          installOverlay.style.display = 'none';
         });
       });
     });
@@ -122,7 +131,7 @@
     // Optional: Hide the install overlay if the app is already installed
     window.addEventListener('appinstalled', () => {
       console.log('PWA was installed');
-      installOverlay.style.display = 'none'; // Hide overlay if already installed
+      installOverlay.style.display = 'none';
     });
   </script>
 </body>
